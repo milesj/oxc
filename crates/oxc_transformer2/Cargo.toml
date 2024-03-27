@@ -1,0 +1,36 @@
+[package]
+name                   = "oxc_transformer2"
+version                = "0.10.0"
+publish                = true
+authors.workspace      = true
+description.workspace  = true
+edition.workspace      = true
+homepage.workspace     = true
+keywords.workspace     = true
+license.workspace      = true
+repository.workspace   = true
+rust-version.workspace = true
+categories.workspace   = true
+
+[lints]
+workspace = true
+
+[lib]
+doctest = false
+
+[dependencies]
+bitflags        = { workspace = true }
+oxc_ast         = { workspace = true }
+oxc_span        = { workspace = true }
+oxc_allocator   = { workspace = true }
+oxc_syntax      = { workspace = true }
+oxc_semantic    = { workspace = true }
+oxc_diagnostics = { workspace = true }
+rustc-hash      = { workspace = true }
+
+serde = { workspace = true, features = ["derive"] }
+phf   = { workspace = true, features = ["macros"] }
+
+[dev-dependencies]
+oxc_parser  = { workspace = true }
+oxc_codegen = { workspace = true }

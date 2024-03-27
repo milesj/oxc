@@ -11,6 +11,7 @@ pub use oxc_syntax::node::{AstNodeId, NodeFlags};
 #[derive(Debug, Clone, Copy)]
 pub struct AstNode<'a> {
     id: AstNodeId,
+
     /// A pointer to the ast node, which resides in the `bumpalo` memory arena.
     kind: AstKind<'a>,
 
@@ -114,6 +115,8 @@ impl<'a> AstNodes<'a> {
         self.nodes.push(node);
         ast_node_id
     }
+
+    pub fn replace_node(&mut self, id: AstNodeId, node: AstNode<'a>) {}
 }
 
 #[derive(Debug)]
