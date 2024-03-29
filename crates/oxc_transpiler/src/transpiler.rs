@@ -5,7 +5,7 @@ use std::{
 };
 
 use oxc_allocator::Allocator;
-use oxc_ast::{ast::Program, visit::walk_mut::*, AstBuilder, AstKind, Visit, VisitMut};
+use oxc_ast::{ast::*, visit::walk_mut::*, AstBuilder, AstOwnedKind, Visit, VisitMut};
 use oxc_diagnostics::Error;
 use oxc_semantic::{
     AstNode, ScopeFlags, ScopeId, ScopeTree, Semantic, SemanticBuilder, SymbolId, SymbolTable,
@@ -67,7 +67,11 @@ impl<'a> Transpiler<'a> {
         Ok(())
     }
 
-    fn run_transformers<'t>(&mut self, mut node: AstKind<'t>, on_leave: bool) -> AstKind<'t> {
+    fn run_transformers<'t>(
+        &mut self,
+        mut node: AstOwnedKind<'t>,
+        on_leave: bool,
+    ) -> AstOwnedKind<'t> {
         for transformer in &mut self.transformers {
             let mut ctx = TransformCtx::default();
 
@@ -88,19 +92,32 @@ impl<'a> Transpiler<'a> {
     }
 }
 
+macro_rules! transpile_visit {
+    ($visitor:ident, $node_name:ident, $ast_kind:path, $ast_walker:ident) => {
+        let mut node = $ast_kind($node_name.clone());
+
+        node = $visitor.run_transformers(node, false);
+
+        if let $ast_kind(inner) = &mut node {
+            $ast_walker($visitor, inner);
+        } else {
+            panic!("Invalid node kind returned!");
+        }
+
+        node = $visitor.run_transformers(node, true);
+
+        if let $ast_kind(inner) = node {
+            *$node_name = inner;
+        }
+    };
+}
+
 impl<'a> VisitMut<'a> for Transpiler<'a> {
     fn visit_program(&mut self, program: &mut Program<'a>) {
-        let cloned_program = program.clone();
-        // let mut node = AstKind::Program(cloned_program);
+        transpile_visit!(self, program, AstOwnedKind::Program, walk_program_mut);
+    }
 
-        // node = self.run_transformers(node, false);
-
-        // if let AstKind::Program(inner) = &mut node {
-        //     walk_program_mut(self, inner);
-        // } else {
-        //     panic!("Invalid node kind returned!");
-        // }
-
-        // node = self.run_transformers(node, true);
+    fn visit_class_body(&mut self, body: &mut ClassBody<'a>) {
+        transpile_visit!(self, body, AstOwnedKind::ClassBody, walk_class_body_mut);
     }
 }

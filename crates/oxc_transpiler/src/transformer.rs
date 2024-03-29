@@ -1,4 +1,4 @@
-use oxc_ast::AstKind;
+use oxc_ast::AstOwnedKind;
 use oxc_semantic::{AstNode, SymbolId};
 use oxc_span::CompactStr;
 use rustc_hash::{FxHashMap, FxHashSet};
@@ -9,7 +9,7 @@ pub struct TransformCtx<'a> {
 
     removed_symbols: FxHashSet<SymbolId>,
     renamed_symbols: FxHashMap<SymbolId, CompactStr>,
-    replaced_node: Option<AstKind<'a>>,
+    replaced_node: Option<AstOwnedKind<'a>>,
 }
 
 impl<'a> TransformCtx<'a> {
@@ -27,20 +27,20 @@ impl<'a> TransformCtx<'a> {
         self
     }
 
-    pub fn replace_node(&mut self, node: AstKind<'a>) -> &mut Self {
+    pub fn replace_node(&mut self, node: AstOwnedKind<'a>) -> &mut Self {
         self.replaced_node = Some(node);
         self
     }
 
-    pub fn get_replaced_node(&mut self) -> Option<AstKind<'a>> {
+    pub fn get_replaced_node(&mut self) -> Option<AstOwnedKind<'a>> {
         self.replaced_node.take()
     }
 }
 
 pub trait Transformer {
-    fn transform<'a>(&mut self, _node: &AstKind<'a>, _ctx: &mut TransformCtx<'a>) {}
+    fn transform<'a>(&mut self, _node: &AstOwnedKind<'a>, _ctx: &mut TransformCtx<'a>) {}
 
-    fn transform_on_leave<'a>(&mut self, _node: &AstKind<'a>, _ctx: &mut TransformCtx<'a>) {}
+    fn transform_on_leave<'a>(&mut self, _node: &AstOwnedKind<'a>, _ctx: &mut TransformCtx<'a>) {}
 }
 
 pub type BoxedTransformer = Box<dyn Transformer>;
