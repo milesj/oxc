@@ -235,7 +235,7 @@ impl<'a> Compressor<'a> {
                     let span = expr.span;
                     let left = self.ast.void_0();
                     let operator = BinaryOperator::StrictEquality;
-                    let right = self.ast.identifier_reference_expression(id_ref);
+                    let right = self.ast.identifier_reference_expression((*id_ref).clone());
                     let cmp = BinaryExpression { span, left, operator, right };
                     *expr = cmp;
                 }

@@ -5,7 +5,7 @@ use std::{
     self,
     fmt::{self, Debug, Formatter},
     hash::{Hash, Hasher},
-    ops, ptr,
+    mem, ops, ptr,
 };
 
 use bumpalo::collections;
@@ -51,6 +51,13 @@ impl<'alloc, T: ?Sized + Debug> Debug for Box<'alloc, T> {
     }
 }
 
+impl<'alloc, T> Clone for Box<'alloc, T> {
+    fn clone(&self) -> Self {
+        // TODO is this correct???
+        Box(unsafe { mem::transmute_copy(self.0) })
+    }
+}
+
 // Unused right now.
 // impl<'alloc, T> PartialEq for Box<'alloc, T>
 // where
@@ -80,7 +87,7 @@ impl<'alloc, T: Hash> Hash for Box<'alloc, T> {
 }
 
 /// Bumpalo Vec
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Vec<'alloc, T>(collections::Vec<'alloc, T>);
 
 impl<'alloc, T> Vec<'alloc, T> {

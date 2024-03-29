@@ -71,7 +71,7 @@ impl<'a> ParserImpl<'a> {
                                         ..string.span.end as usize - 1];
                                     let directive = self.ast.directive(
                                         expr.span,
-                                        (*string).clone(),
+                                        (**string).clone(),
                                         Atom::from(src),
                                     );
                                     directives.push(directive);

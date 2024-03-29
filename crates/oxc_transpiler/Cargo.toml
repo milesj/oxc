@@ -1,5 +1,5 @@
 [package]
-name                   = "oxc_transformer2"
+name                   = "oxc_transpiler"
 version                = "0.10.0"
 publish                = true
 authors.workspace      = true

@@ -56,9 +56,9 @@ impl<'a> LogicalAssignmentOperators<'a> {
         match &assignment_expr.left {
             AssignmentTarget::SimpleAssignmentTarget(target) => match target {
                 SimpleAssignmentTarget::AssignmentTargetIdentifier(ident) => {
-                    left_expr = self.ctx.ast.identifier_reference_expression((*ident).clone());
+                    left_expr = self.ctx.ast.identifier_reference_expression((**ident).clone());
                     assign_target =
-                        self.ctx.ast.simple_assignment_target_identifier((*ident).clone());
+                        self.ctx.ast.simple_assignment_target_identifier((**ident).clone());
                 }
                 SimpleAssignmentTarget::MemberAssignmentTarget(member_expr) => {
                     let op = AssignmentOperator::Assign;

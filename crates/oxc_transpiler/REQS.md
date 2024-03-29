@@ -1,10 +1,9 @@
 Requirements
 
 - [ ] Traverse upwards through parents
-- [ ] Be able to mutate parents
-- [ ] Cannot mutate a child and parent together
+- [ ] Be able to mutate parents via child, or vice versa
+- [ ] Cannot mutate a child and parent together (in the same method)
 - [ ] Scopes/symbols/etc need to be updated when something is mutated
-- [ ] Avoid ownership issues (ditch `Visit[Mut]`?)
 
 Nice to haves
 

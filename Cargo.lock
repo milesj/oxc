@@ -1803,10 +1803,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "oxc_transformer2"
+name = "oxc_transpiler"
 version = "0.10.0"
 dependencies = [
- "bitflags 2.4.2",
+ "bitflags 2.5.0",
  "oxc_allocator",
  "oxc_ast",
  "oxc_codegen",

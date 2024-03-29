@@ -110,7 +110,7 @@ impl<'a> Hash for NumericLiteral<'a> {
     }
 }
 
-#[derive(Debug, Hash)]
+#[derive(Debug, Clone, Hash)]
 #[cfg_attr(feature = "serialize", derive(Serialize, Tsify))]
 #[cfg_attr(feature = "serialize", serde(tag = "type"))]
 pub struct BigIntLiteral<'a> {
